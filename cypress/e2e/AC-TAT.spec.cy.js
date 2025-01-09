@@ -206,8 +206,11 @@ describe('Testes check box', () => {
   })
 
   it('Check telefone e erro obrigatoriedade', function() {
+    cy.clock()
     cy.get('#phone-checkbox').check()
     cy.clickSubmitResult('.error')
+    cy.tick(3000)
+    cy.get('.error').should('not.be.visible')
   })
 
 
@@ -252,3 +255,61 @@ describe('Links nova aba', () => {
   })
 
 })
+
+describe('Rodando teste 5 vezes check box', () => {
+  beforeEach(() => {
+    cy.initialVisit()
+    cy.fillMandatoryFieldsAdd('Sandro', 'Nunes', 'Nunes@nunes.com', "texto texto")
+  })
+
+  Cypress._.times(5, () => {
+
+    it('Rodando teste 5 vezes Check telefone e erro obrigatoriedade', function() {
+      cy.clock()
+      cy.get('#phone-checkbox').check()
+      cy.clickSubmitResult('.error')
+      cy.tick(3000)
+      cy.get('.error').should('not.be.visible')
+    })
+
+  }) 
+})
+
+
+describe('Valida texto das mesagens de sucess e error ', () => {
+  beforeEach(() => {
+    cy.initialVisit()
+  })
+
+  it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', () => {
+    cy.get('.success')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Mensagem enviada com sucesso.')
+      .invoke('hide')
+      .should('not.be.visible')
+    cy.get('.error')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Valide os campos obrigatórios!')
+      .invoke('hide')
+      .should('not.be.visible')
+  })
+
+})
+
+describe.only('Preenchendo compo texto com invoke ', () => {
+  beforeEach(() => {
+    cy.initialVisit()
+  })
+
+  it('Preenchendo compo texto com invoke e validando', () => { 
+    cy.get('#open-text-area')
+      .invoke('val', 'Preenchendo compo texto com invoke e validando')
+      .should('have.value', 'Preenchendo compo texto com invoke e validando')
+  })
+
+})
+
