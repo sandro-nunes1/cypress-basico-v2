@@ -300,7 +300,7 @@ describe('Valida texto das mesagens de sucess e error ', () => {
 
 })
 
-describe.only('Preenchendo compo texto com invoke ', () => {
+describe('Preenchendo compo texto com invoke ', () => {
   beforeEach(() => {
     cy.initialVisit()
   })
@@ -313,3 +313,19 @@ describe.only('Preenchendo compo texto com invoke ', () => {
 
 })
 
+
+it('Rquisição via url ', () => {
+
+  cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html')
+    .as('getRequest')
+    .its('status')
+    .should('be.equal', 200)
+
+  cy.get('@getRequest')
+    .its('statusText')
+    .should('be.equal', 'OK')
+
+  cy.get('@getRequest')
+    .its('body')
+    .should('include', 'CAC TAT')
+})
